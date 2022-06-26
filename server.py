@@ -1,6 +1,7 @@
 from http.client import INTERNAL_SERVER_ERROR
 import json
 from flask import Flask, render_template, request, redirect, flash, url_for, abort
+from datetime import date, datetime
 
 
 def loadClubs():
@@ -29,7 +30,6 @@ def index():
 def showSummary():
     try:
         club = [club for club in clubs if club['email'] == request.form['email']][0]
-        print("coucou")
         return render_template('welcome.html',club=club,competitions=competitions)
     except IndexError:
         abort(405)
@@ -53,21 +53,26 @@ def book(competition,club):
 def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
+    today = datetime.now()
+    compDate = datetime.strptime(competition["date"], '%Y-%m-%d %H:%M:%S')
     placesRequired = int(request.form['places'])
     clubPoints = int(club["points"])
     competitionPlaces = int(competition['numberOfPlaces'])
-    if clubPoints >= int(placesRequired):
-        if placesRequired <= 12:
-            if int(placesRequired) <= competitionPlaces:            
-                competition['numberOfPlaces'] = competitionPlaces -placesRequired
-                club["points"] = clubPoints - placesRequired
-                flash('Great-booking complete!')
+    if today < compDate:
+        if clubPoints >= placesRequired:
+            if placesRequired <= 12:
+                if int(placesRequired) <= competitionPlaces:            
+                    competition['numberOfPlaces'] = competitionPlaces -placesRequired
+                    club["points"] = clubPoints - placesRequired
+                    flash('Great-booking complete !')
+                else:
+                    flash("Sorry, you can't take more places that are available.")
             else:
-                flash("Sorry, you can't take more places that are available.")
+                flash("Sorry, you can't take more than 12 places.")
         else:
-            flash("Sorry, you can't take more than 12 places.")
-    else:
-        flash("Sorry, you can't take more places than you have points.")
+            flash("Sorry, you can't take more places than you have points.")
+    else: 
+        flash(f"The competition has already taken place on this date : {compDate}.")
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
