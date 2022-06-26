@@ -1,5 +1,6 @@
+from http.client import INTERNAL_SERVER_ERROR
 import json
-from flask import Flask, render_template, request, redirect, flash, url_for
+from flask import Flask, render_template, request, redirect, flash, url_for, abort
 
 
 def loadClubs():
@@ -26,9 +27,16 @@ def index():
 
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
-    club = [club for club in clubs if club['email'] == request.form['email']][0]
-    return render_template('welcome.html',club=club,competitions=competitions)
+    try:
+        club = [club for club in clubs if club['email'] == request.form['email']][0]
+        print("coucou")
+        return render_template('welcome.html',club=club,competitions=competitions)
+    except IndexError:
+        abort(405)
 
+@app.errorhandler(405)
+def email_not_found(e):
+    return render_template("email_not_found.html")
 
 @app.route('/book/<competition>/<club>')
 def book(competition,club):
@@ -52,8 +60,6 @@ def purchasePlaces():
 
 
 # TODO: Add route for points display
-# if __name__ == " __main__":
-#     app.run(host='0.0.0.0')
 
 @app.route('/logout')
 def logout():
