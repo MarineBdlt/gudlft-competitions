@@ -16,6 +16,16 @@
        </ul>
     {% endif%}
     Points available: {{club['points']}}
+    <h3>Clubs:</h3>
+    <ul>
+        {% for club in clubs%}
+        <li>
+            Club: {{club['name']}}<br>
+            Number of Points: {{club['points']}}</br>
+        </li>
+        <hr />
+        {% endfor %}
+    </ul>
     <h3>Competitions:</h3>
     <ul>
         {% for comp in competitions%}
