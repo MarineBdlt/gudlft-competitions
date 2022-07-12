@@ -26,11 +26,11 @@ clubs = loadClubs()
 def index():
     return render_template('index.html')
 
-@app.route('/showSummary',methods=['POST'])
+@app.route('/showSummary',methods=['POST']) # post ou get ?
 def showSummary():
     try:
         club = [club for club in clubs if club['email'] == request.form['email']][0]
-        return render_template('welcome.html',clubs=clubs, club=club,competitions=competitions)
+        return render_template('welcome.html',clubs=clubs, club=club, competitions=competitions)
     except IndexError:
         abort(405)
 
@@ -38,15 +38,15 @@ def showSummary():
 def email_not_found(e):
     return render_template("email_not_found.html")
 
-@app.route('/book/<competition>/<club>')
-def book(competition,club):
-    foundClub = [c for c in clubs if c['name'] == club][0]
-    foundCompetition = [c for c in competitions if c['name'] == competition][0]
+@app.route('/book/<comp_name>/<club_name>')
+def book(comp_name,club_name):
+    foundClub = next((c for c in clubs if c['name'] == club_name), None)
+    foundCompetition = next((c for c in competitions if c['name'] == comp_name), None)
     if foundClub and foundCompetition:
         return render_template('booking.html',club=foundClub,competition=foundCompetition)
     else:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html', club=club_name, competitions=competitions)
 
 
 @app.route('/purchasePlaces',methods=['POST'])
