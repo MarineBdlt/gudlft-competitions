@@ -42,11 +42,13 @@ def email_not_found(e):
 def book(comp_name,club_name):
     foundClub = next((c for c in clubs if c['name'] == club_name), None)
     foundCompetition = next((c for c in competitions if c['name'] == comp_name), None)
-    if foundClub and foundCompetition:
-        return render_template('booking.html',club=foundClub,competition=foundCompetition)
-    else:
+    if not foundClub:
+        return render_template('index.html')
+    if not foundCompetition:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club_name, competitions=competitions)
+        return render_template('welcome.html', clubs=clubs, club=foundClub, competitions=competitions)
+    else:
+        return render_template('booking.html', club=foundClub, competition=foundCompetition)
 
 
 @app.route('/purchasePlaces',methods=['POST'])
@@ -73,7 +75,7 @@ def purchasePlaces():
             flash("Sorry, you can't take more places than you have points.")
     else: 
         flash(f"The competition has already taken place on this date : {compDate}.")
-    return render_template('welcome.html', club=club, competitions=competitions)
+    return render_template('welcome.html', clubs=clubs, club=club, competitions=competitions)
 
 
 # TODO: Add route for points display
