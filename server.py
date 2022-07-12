@@ -77,9 +77,6 @@ def purchasePlaces():
         flash(f"The competition has already taken place on this date : {compDate}.")
     return render_template('welcome.html', clubs=clubs, club=club, competitions=competitions)
 
-
-# TODO: Add route for points display
-
 @app.route('/logout')
 def logout():
     return redirect(url_for('index'))
