@@ -18,7 +18,7 @@
     Points available: {{club['points']}}
     <h3>Clubs:</h3>
     <ul>
-        {% for club in clubs%}
+        {% for club in clubs %}
         <li>
             Club: {{club['name']}}<br>
             Number of Points: {{club['points']}}</br>
@@ -34,7 +34,7 @@
             Date: {{comp['date']}}</br>
             Number of Places: {{comp['numberOfPlaces']}}
             {%if comp['numberOfPlaces']|int >0%}
-            <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}">Book Places</a>
+            <a href="{{ url_for('book',comp_name=comp['name'],club_name=club['name']) }}">Book Places</a>
             {%endif%}
         </li>
         <hr />
