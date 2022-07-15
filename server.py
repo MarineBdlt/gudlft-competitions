@@ -21,6 +21,7 @@ app.secret_key = 'something_special'
 
 competitions = loadCompetitions()
 clubs = loadClubs()
+print("IN APP CLUBS", clubs)
 
 @app.route('/')
 def index():
