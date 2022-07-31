@@ -32,8 +32,8 @@
         <li>
             {{comp['name']}}<br />
             Date: {{comp['date']}}</br>
-            Number of Places: {{comp['numberOfPlaces']}}
-            {%if comp['numberOfPlaces']|int >0%}
+            Number of Places: {{comp['number_of_places']}}
+            {%if comp['number_of_places']|int >0%}
             <a href="{{ url_for('book',comp_name=comp['name'],club_name=club['name']) }}">Book Places</a>
             {%endif%}
         </li>
