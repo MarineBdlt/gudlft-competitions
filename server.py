@@ -34,7 +34,7 @@ def index():
 def show_summary():
     try:
         print(CLUBS)
-        club = [club for club in CLUBS if club['email'] == request.form['email']][0] # OUT OF RANGE !
+        club = [club for club in CLUBS if club['email'] == request.form['email']][0] 
         return render_template('welcome.html', clubs=CLUBS, club=club, competitions=COMPETITIONS)
     except IndexError:
         abort(405)
@@ -58,7 +58,6 @@ def book(comp_name,club_name):
 
 @app.route('/purchase-places',methods=['POST'])
 def purchase_places():
-    print("REQUEST", request.form)
     competition = [c for c in COMPETITIONS if c['name'] == request.form['competition']][0]
     club = [c for c in CLUBS if c['name'] == request.form['club']][0]
     today = datetime.now()
